@@ -93,7 +93,7 @@ serve(async (req) => {
     };
 
     console.log("➡️ Calling CAD service", CAD_URL);
-    const cadResp = await fetch(`${CAD_URL}/convert`, {
+    const cadResp = await fetch(${CAD_URL}/convert, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(cadReq),
@@ -101,32 +101,32 @@ serve(async (req) => {
     });
     if (!cadResp.ok) {
       const txt = await cadResp.text();
-      throw new Error(`CAD service error: ${txt}`);
+      throw new Error(CAD service error: ${txt});
     }
     const cadJson = await cadResp.json();
 
     // 6) Upload returned files to your storage bucket
     const bucket = supabaseAdmin.storage.from("cad-files");
     // STEP
-    await bucket.upload(`step/design_${conversionId}.step`, new Blob([cadJson.step_file]), {
+    await bucket.upload(step/design_${conversionId}.step, new Blob([cadJson.step_file]), {
       contentType: "model/step",
       upsert: true,
     });
     // STL
-    await bucket.upload(`stl/design_${conversionId}.stl`, new Blob([cadJson.stl_file]), {
+    await bucket.upload(stl/design_${conversionId}.stl, new Blob([cadJson.stl_file]), {
       contentType: "model/stl",
       upsert: true,
     });
     // OBJ
-    await bucket.upload(`obj/design_${conversionId}.obj`, new Blob([cadJson.obj_file]), {
+    await bucket.upload(obj/design_${conversionId}.obj, new Blob([cadJson.obj_file]), {
       contentType: "model/obj",
       upsert: true,
     });
 
     // 7) Get public URLs
-    const stepUrl = bucket.getPublicUrl(`step/design_${conversionId}.step`).data.publicUrl;
-    const stlUrl  = bucket.getPublicUrl(`stl/design_${conversionId}.stl`).data.publicUrl;
-    const objUrl  = bucket.getPublicUrl(`obj/design_${conversionId}.obj`).data.publicUrl;
+    const stepUrl = bucket.getPublicUrl(step/design_${conversionId}.step).data.publicUrl;
+    const stlUrl  = bucket.getPublicUrl(stl/design_${conversionId}.stl).data.publicUrl;
+    const objUrl  = bucket.getPublicUrl(obj/design_${conversionId}.obj).data.publicUrl;
 
     // 8) Finalize in DB
     await supabaseAdmin
